@@ -1,0 +1,170 @@
+#cgpt-nav-root {
+  position: fixed;
+  top: 80px;
+  right: 12px;
+  width: 280px;
+  max-height: calc(100vh - 120px);
+  z-index: 999999;
+  background: rgba(20, 20, 20, 0.92);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial;
+}
+
+#cgpt-nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 10px;
+}
+
+#cgpt-nav-title {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.95;
+  white-space: nowrap;
+}
+
+#cgpt-nav-actions {
+  display: flex;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+#cgpt-nav-actions button {
+  cursor: pointer;
+  border: 0;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+#cgpt-nav-actions button:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+#cgpt-nav-actions button:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.35);
+  outline-offset: 2px;
+}
+
+#cgpt-nav-list {
+  padding: 8px;
+  overflow: auto;
+  max-height: calc(100vh - 170px);
+}
+
+.cgpt-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  line-height: 1.2;
+  border: 1px solid transparent;
+}
+
+.cgpt-nav-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.cgpt-nav-badge {
+  flex: 0 0 auto;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  opacity: 0.95;
+}
+
+.cgpt-nav-star,
+.cgpt-nav-edit {
+  flex: 0 0 auto;
+  border: 0;
+  cursor: pointer;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  padding: 2px 4px;
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.cgpt-nav-star:hover,
+.cgpt-nav-edit:hover {
+  background: rgba(255, 255, 255, 0.10);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.cgpt-nav-text {
+  flex: 1 1 auto;
+  font-size: 12px;
+  opacity: 0.95;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cgpt-nav-input {
+  width: 100%;
+  font-size: 12px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  outline: none;
+  background: rgba(0, 0, 0, 0.25);
+  color: #fff;
+}
+
+.cgpt-nav-input:focus {
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* 折叠：只显示折叠按钮，避免按钮溢出导致“点不到无法展开” */
+#cgpt-nav-root.cgpt-nav-collapsed {
+  width: 52px;
+}
+
+#cgpt-nav-root.cgpt-nav-collapsed #cgpt-nav-title,
+#cgpt-nav-root.cgpt-nav-collapsed #cgpt-nav-list,
+#cgpt-nav-root.cgpt-nav-collapsed #cgpt-nav-btn-top,
+#cgpt-nav-root.cgpt-nav-collapsed #cgpt-nav-btn-filter,
+#cgpt-nav-root.cgpt-nav-collapsed #cgpt-nav-btn-refresh,
+#cgpt-nav-root.cgpt-nav-collapsed #cgpt-nav-btn-export {
+  display: none;
+}
+
+#cgpt-nav-root.cgpt-nav-collapsed #cgpt-nav-header {
+  justify-content: center;
+}
+
+#cgpt-nav-root.cgpt-nav-collapsed #cgpt-nav-actions {
+  gap: 0;
+}
+
+#cgpt-nav-root.cgpt-nav-collapsed #cgpt-nav-btn-collapse {
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+
+/* 小屏收敛 */
+@media (max-width: 768px) {
+  #cgpt-nav-root {
+    top: 64px;
+    right: 8px;
+    width: 240px;
+    max-height: calc(100vh - 96px);
+  }
+}
