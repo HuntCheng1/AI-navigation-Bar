@@ -3,19 +3,27 @@
   "name": "ChatGPT 对话导航栏",
   "version": "0.3.0",
   "description": "在单个 ChatGPT 对话页面添加可点击的消息导航栏，支持重命名、收藏与导出。",
-  "permissions": ["storage"],
+  "permissions": [
+    "storage"
+  ],
   "host_permissions": [
     "https://chatgpt.com/*",
-    "https://chat.openai.com/*"
+    "https://chat.openai.com/*",
+    "https://gemini.google.com/*"
   ],
   "content_scripts": [
     {
       "matches": [
         "https://chatgpt.com/*",
-        "https://chat.openai.com/*"
+        "https://chat.openai.com/*",
+        "https://gemini.google.com/*"
       ],
-      "js": ["content.js"],
-      "css": ["styles.css"],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "styles.css"
+      ],
       "run_at": "document_idle"
     }
   ]

@@ -15,6 +15,8 @@
     url: location.href
   };
 
+  const isGemini = location.hostname.includes("gemini.google.com");
+
   function normalizeSpaces(s) {
     return (s || "").replace(/\s+/g, " ").trim();
   }
@@ -24,15 +26,24 @@
     return (t || "")
       .replace(/^(你说|我说|你说过|我说过)\s*[:：]\s*/i, "")
       .replace(/^(you said|you wrote)\s*[:：]\s*/i, "")
-      .replace(/^(chatgpt said|assistant)\s*[:：]\s*/i, "");
+      .replace(/^(chatgpt said|assistant|gemini said)\s*[:：]\s*/i, "");
   }
 
   function getTextFromMessage(node) {
     if (!node) return "";
-    const content =
-      node.querySelector?.(".markdown") ||
-      node.querySelector?.(".prose") ||
-      node;
+    let content;
+
+    if (isGemini) {
+      // Gemini 文本提取
+      content = node.querySelector(".message-content") || node;
+    } else {
+      // ChatGPT
+      content =
+        node.querySelector?.(".markdown") ||
+        node.querySelector?.(".prose") ||
+        node;
+    }
+
     let t = normalizeSpaces(content?.innerText || "");
     t = stripUiPrefixes(t);
     return t;
@@ -48,6 +59,15 @@
   }
 
   function getRole(node) {
+    if (isGemini) {
+      const tag = node.tagName.toLowerCase();
+      if (tag === "user-query" || node.getAttribute("data-test-id") === "user-query") return "user";
+      if (tag === "model-response" || node.getAttribute("data-test-id") === "model-response") return "assistant";
+      if (node.querySelector("user-query")) return "user";
+      if (node.querySelector("model-response")) return "assistant";
+      return "unknown";
+    }
+
     return (
       node.getAttribute?.("data-message-author-role") ||
       node.querySelector?.("[data-message-author-role]")?.getAttribute?.("data-message-author-role") ||
@@ -59,6 +79,22 @@
   function findMessageNodes() {
     const main = document.querySelector("main") || document.body;
 
+    if (isGemini) {
+      // Gemini 策略
+      // 1. 尝试找 custom elements
+      const candidates = Array.from(main.querySelectorAll("user-query, model-response"));
+      if (candidates.length) return candidates;
+      // 2. 尝试找 data-test-id
+      const dataTestIds = Array.from(main.querySelectorAll('[data-test-id="user-query"], [data-test-id="model-response"]'));
+      if (dataTestIds.length) return dataTestIds;
+      // 3. 尝试找 class
+      const classes = Array.from(main.querySelectorAll('.user-query, .model-response'));
+      if (classes.length) return classes;
+
+      return [];
+    }
+
+    // ChatGPT 策略
     const turns = Array.from(
       main.querySelectorAll('[data-testid^="conversation-turn"], [data-testid="conversation-turn"]')
     );
@@ -448,6 +484,8 @@
 
   function chooseObserveTarget() {
     const main = document.querySelector("main") || document.body;
+    if (isGemini) return main;
+
     const candidate =
       main.querySelector?.('[data-testid^="conversation-turn"]')?.parentElement ||
       main;
@@ -458,7 +496,7 @@
     const target = chooseObserveTarget();
 
     if (state.observer) {
-      try { state.observer.disconnect(); } catch (_) {}
+      try { state.observer.disconnect(); } catch (_) { }
     }
 
     state.observer = new MutationObserver((mutations) => {
